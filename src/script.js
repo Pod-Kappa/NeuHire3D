@@ -2,14 +2,13 @@ import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {Player} from './player.js'
 
 var scene, camera, renderer, mesh;
 var meshFloor, ambientLight, light;
 
-var crate, crateTexture, crateNormalMap, crateBumpMap;
-
 var keyboard = {};
-var player = { height:1.8, speed:0.2, turnSpeed:Math.PI*0.02 };
+var player;
 var USE_WIREFRAME = false;
 
 // An object to hold all the things needed for our loading screen
@@ -26,11 +25,9 @@ var RESOURCES_LOADED = false;
 
 function init(){
 	scene = new THREE.Scene();
-	camera = new THREE.PerspectiveCamera(90, 1280/720, 0.1, 1000);
-	
-	
+	player = new Player(scene);
+
 	// Set up the loading screen's scene.
-	// It can be treated just like our main scene.
 	loadingScreen.box.position.set(0,0,5);
 	loadingScreen.camera.lookAt(loadingScreen.box.position);
 	loadingScreen.scene.add(loadingScreen.box);
@@ -47,16 +44,6 @@ function init(){
 		console.log("loaded all resources");
 		RESOURCES_LOADED = true;
 	};
-	
-	
-	mesh = new THREE.Mesh(
-		new THREE.BoxGeometry(1,1,1),
-		new THREE.MeshPhongMaterial({color:0xff4444, wireframe:USE_WIREFRAME})
-	);
-	mesh.position.y += 1;
-	mesh.receiveShadow = true;
-	mesh.castShadow = true;
-	scene.add(mesh);
 	
 	meshFloor = new THREE.Mesh(
 		new THREE.PlaneGeometry(20,20, 10,10),
@@ -75,73 +62,74 @@ function init(){
 	light.shadow.camera.near = 0.1;
 	light.shadow.camera.far = 25;
 	scene.add(light);
-
-	const loader = new GLTFLoader();
-	loader.load('assets/glbs/Chair.glb', function (gltf) { 
-		 console.log(gltf)
-		 const root = gltf.scene;
-		 scene.add(root);
-	});
-
-	crate = new THREE.Mesh(
-		new THREE.BoxGeometry(3,3,3),
-		new THREE.MeshPhongMaterial({
-			color:0xffffff,
-			map:crateTexture,
-			bumpMap:crateBumpMap,
-			normalMap:crateNormalMap
-		})
-	);
-	scene.add(crate);
-	crate.position.set(2.5, 3/2, 2.5);
-	crate.receiveShadow = true;
-	crate.castShadow = true;
-
 	
-	camera.position.set(0, player.height, -5);
-	camera.lookAt(new THREE.Vector3(0,player.height,0));
+	player.camera.position.set(0, player.height, player.offset);
+	player.camera.lookAt(new THREE.Vector3(0,player.height,0));
 	
 	renderer = new THREE.WebGLRenderer();
-	renderer.setSize(1280, 720);
+	
+	const sizes = {
+		width: window.innerWidth,
+		height: window.innerHeight
+	}
+
+	window.addEventListener('resize', () =>
+	{
+		// Update sizes
+		sizes.width = window.innerWidth
+		sizes.height = window.innerHeight
+
+		// Update camera
+		player.camera.aspect = sizes.width / sizes.height
+		player.camera.updateProjectionMatrix()
+
+		// Update renderer
+		renderer.setSize(sizes.width, sizes.height)
+		renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+	})
+	renderer.setSize(sizes.width, sizes.height);
 
 	renderer.shadowMap.enabled = true;
 	renderer.shadowMap.type = THREE.BasicShadowMap;
 	
 	document.body.appendChild(renderer.domElement);
 	
-  loadingScreen.box.position.x = 10;
+  	loadingScreen.box.position.x = 10;
 	animate();
 }
 
 function animate(){
 	// This block runs while resources are loading.
-  
 	if( RESOURCES_LOADED == false ){
 		requestAnimationFrame(animate);
 	
-    
-		loadingScreen.box.position.x -= 0.05;
+	  loadingScreen.box.position.x -= 0.5;
       if( loadingScreen.box.position.x < -10 ) RESOURCES_LOADED = true;
       loadingScreen.box.position.y = Math.sin(loadingScreen.box.position.x)
-      
+
       renderer.render(loadingScreen.scene, loadingScreen.camera);
   		return;
 	}
-
 	requestAnimationFrame(animate);
 	
-	mesh.rotation.x += 0.01;
-	mesh.rotation.y += 0.02;
-	crate.rotation.y += 0.01;
+	// mesh.rotation.x += 0.01;
+	// mesh.rotation.y += 0.02;
+	// crate.rotation.y += 0.01;
 	
 	if(keyboard[37]){ // left arrow key
-		camera.rotation.y -= player.turnSpeed;
+		player.moveLeft();
 	}
-	if(keyboard[39]){ // right arrow key
-		camera.rotation.y += player.turnSpeed;
+	else if(keyboard[39]){ // right arrow key
+		player.moveRight();
+	}
+	else if(keyboard[38]){ // left arrow key
+		player.moveForward();
+	}
+	else if(keyboard[40]){ // right arrow key
+		player.moveBackward();
 	}
 	
-	renderer.render(scene, camera);
+	renderer.render(scene, player.camera);
 }
 
 function keyDown(event){
@@ -152,6 +140,7 @@ function keyUp(event){
 	keyboard[event.keyCode] = false;
 }
 
+	
 window.addEventListener('keydown', keyDown);
 window.addEventListener('keyup', keyUp);
 
