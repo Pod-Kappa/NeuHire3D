@@ -53,10 +53,7 @@ export class Player {
         this.camera.position.z -= this.speed;
     }
     
-    cameraAdjustForward() {
-
-    }
-    cameraAdjustBackward() {
-        
+    updateCamera(e){
+        console.log(e);
     }
 }

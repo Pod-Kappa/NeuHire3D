@@ -140,8 +140,8 @@ function keyUp(event){
 	keyboard[event.keyCode] = false;
 }
 
-	
 window.addEventListener('keydown', keyDown);
 window.addEventListener('keyup', keyUp);
+window.addEventListener('scroll', (e) => player.updateCamera(e));
 
 window.onload = init;
