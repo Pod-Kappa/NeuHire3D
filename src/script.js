@@ -77,10 +77,10 @@ function init(){
 	scene.add(light);
 
 	const loader = new GLTFLoader();
-	loader.load('./assets/Chair.glb', function (gltf) { 
+	loader.load('assets/glbs/Chair.glb', function (gltf) { 
+		 console.log(gltf)
 		 const root = gltf.scene;
 		 scene.add(root);
-  
 	});
 
 	crate = new THREE.Mesh(
