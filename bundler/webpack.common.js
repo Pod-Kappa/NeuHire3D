@@ -15,7 +15,7 @@ module.exports = {
     [
         new CopyWebpackPlugin({
             patterns: [
-                { from: path.resolve(__dirname, '../static') }
+                { from: path.resolve(__dirname, '../assets') }
             ]
         }),
         new HtmlWebpackPlugin({
@@ -28,6 +28,19 @@ module.exports = {
     {
         rules:
         [
+            {
+                test: /\.(glb|gltf)$/,
+                use:
+                [
+                    {
+                        loader: 'file-loader',
+                        options:
+                        {
+                            outputPath: 'assets/'
+                        }
+                    }
+                ]
+            },
             // HTML
             {
                 test: /\.(html)$/,
@@ -68,7 +81,6 @@ module.exports = {
                     }
                 ]
             },
-
             // Fonts
             {
                 test: /\.(ttf|eot|woff|woff2)$/,
