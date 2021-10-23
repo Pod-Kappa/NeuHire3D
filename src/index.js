@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { Player } from './player.js';
-import { renderPlayerInfo } from './infoPannel';
+import { renderPlayerInfoPannel } from './infoPanel';
 
 var scene, camera, renderer, mesh;
 var meshFloor, ambientLight, light;
@@ -117,7 +117,7 @@ function animate() {
   // crate.rotation.y += 0.01;
 
   resolvePlayerInputMovement();
-  renderPlayerInfo(player);
+  renderPlayerInfoPannel(player);
 
   renderer.render(scene, player.camera);
 }
@@ -142,7 +142,6 @@ const keyDown = event => {
   } else {
     !pressedKeys.includes(event.keyCode) && pressedKeys.push(event.keyCode);
   }
-  console.log(pressedKeys);
 };
 
 const keyUp = event => {

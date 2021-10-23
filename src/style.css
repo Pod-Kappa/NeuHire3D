@@ -21,13 +21,14 @@ body {
   font-weight: bolder;
   font-size: small;
   color: yellowgreen;
+  z-index: 9999;
 }
 
-.infoContainer {
+#infoContainer {
   padding: 10px;
 }
 
-.webgl {
+#webgl {
   position: fixed;
   top: 0;
   left: 0;
