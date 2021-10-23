@@ -1,19 +1,35 @@
-*
-{
-    margin: 0;
-    padding: 0;
+* {
+  margin: 0;
+  padding: 0;
 }
 
 html,
-body
-{
-    overflow: hidden;
+body {
+  overflow: hidden;
 }
 
-.webgl
-{
-    position: fixed;
-    top: 0;
-    left: 0;
-    outline: none;
+#playerInfoHUD {
+  display: flex;
+  /* justify-content: space-evenly; */
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 300px;
+  max-height: 150px;
+  background: purple;
+  opacity: 0.75;
+  font-weight: bolder;
+  font-size: small;
+  color: yellowgreen;
+}
+
+.infoContainer {
+  padding: 10px;
+}
+
+.webgl {
+  position: fixed;
+  top: 0;
+  left: 0;
+  outline: none;
 }
