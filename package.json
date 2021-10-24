@@ -3,11 +3,13 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --config ./bundler/webpack.prod.js",
+    "clean": "rm -rf dist/",
     "dev": "webpack serve --config ./bundler/webpack.dev.js"
   },
   "dependencies": {
     "@babel/core": "^7.14.6",
     "@babel/preset-env": "^7.14.7",
+    "@types/three": "^0.133.1",
     "babel-loader": "^8.2.2",
     "cannon": "^0.6.2",
     "clean-webpack-plugin": "^3.0.0",
@@ -26,5 +28,9 @@
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^5.8.0"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.4.4"
   }
 }

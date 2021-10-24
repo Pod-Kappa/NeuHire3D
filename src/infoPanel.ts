@@ -1,11 +1,13 @@
-const formatNumber = num => `${Math.round((num + Number.EPSILON) * 100) / 100}`;
+import { Player } from './player';
+
+const formatNumber = (num: number) => `${Math.round((num + Number.EPSILON) * 100) / 100}`;
 
 var isOpen = true;
 
-export const renderPlayerInfoPannel = player => {
+export const renderPlayerInfoPannel = (player: Player) => {
   const hudElement = document.getElementById('playerInfoHUD');
   const child = document.getElementById('infoContainer');
-  child && hudElement.removeChild(child);
+  child && hudElement && hudElement.removeChild(child);
 
   if (isOpen) {
     const containerElement = document.createElement('div');
@@ -35,17 +37,19 @@ export const renderPlayerInfoPannel = player => {
     turnSpeed.innerText = `turnSpeed: ${formatNumber(player.turnSpeed)}`;
     containerElement.appendChild(turnSpeed);
 
-    hudElement.insertBefore(containerElement, document.getElementById('infoPanelButton'));
+    hudElement && hudElement.insertBefore(containerElement, document.getElementById('infoPanelButton'));
   }
 };
 
 const setInfoPanelButton = () => {
   const button = document.getElementById('infoPanelButton');
-  button.innerText = isOpen ? `X` : `Player Info`;
-  button.onclick = function (event) {
-    isOpen = !isOpen;
+  if (button) {
     button.innerText = isOpen ? `X` : `Player Info`;
-  };
+    button.onclick = function (event) {
+      isOpen = !isOpen;
+      button.innerText = isOpen ? `X` : `Player Info`;
+    };
+  }
 };
 
 setInfoPanelButton();

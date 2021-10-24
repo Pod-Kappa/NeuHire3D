@@ -1,14 +1,12 @@
 import './style.css';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { Player } from './player.js';
+import { Player } from './player';
 import { renderPlayerInfoPannel } from './infoPanel';
 
-var scene, renderer;
+var scene: THREE.Scene, renderer: THREE.WebGLRenderer;
 
-var pressedKeys = [];
-var player;
+var pressedKeys: string[] = [];
+var player: Player;
 var USE_WIREFRAME = false;
 
 // An object to hold all the things needed for our loading screen
@@ -122,40 +120,40 @@ function animate() {
 
 const resolvePlayerInputMovement = () => {
   /* Player Movement */
-  (pressedKeys.includes(38) || pressedKeys.includes(87)) && player.moveNorth(); // Up-Arrow or W
-  (pressedKeys.includes(37) || pressedKeys.includes(65)) && player.moveWest(); // Left-Arrow or A
-  (pressedKeys.includes(40) || pressedKeys.includes(83)) && player.moveSouth(); // Down-Arrow or S
-  (pressedKeys.includes(39) || pressedKeys.includes(68)) && player.moveEast(); // Right-Arrow Or D
+  (pressedKeys.includes('38') || pressedKeys.includes('87')) && player.moveNorth(); // Up-Arrow or W
+  (pressedKeys.includes('37') || pressedKeys.includes('65')) && player.moveWest(); // Left-Arrow or A
+  (pressedKeys.includes('40') || pressedKeys.includes('83')) && player.moveSouth(); // Down-Arrow or S
+  (pressedKeys.includes('39') || pressedKeys.includes('68')) && player.moveEast(); // Right-Arrow Or D
 
   /* Camera Rotation */
-  pressedKeys.includes(81) && player.rotateCounterClockwise();
-  pressedKeys.includes(69) && player.rotateClockwise();
+  pressedKeys.includes('81') && player.rotateCounterClockwise();
+  pressedKeys.includes('69') && player.rotateClockwise();
 
   /* Special (i.e. Jump) */
-  pressedKeys.includes(32) && player.jump();
+  pressedKeys.includes('32') && player.jump();
 };
 
-const keyDown = event => {
-  if (event.keyCode === 16) {
+const keyDown = (event: KeyboardEvent) => {
+  if (event.code === '16') {
     player.boostSpeedMode();
   } else {
-    !pressedKeys.includes(event.keyCode) && pressedKeys.push(event.keyCode);
+    !pressedKeys.includes(event.code) && pressedKeys.push(event.code);
   }
   console.log(pressedKeys);
 };
 
-const keyUp = event => {
-  if (event.keyCode === 16) {
-    event.keyCode === 16 && player.defaultSpeedMode();
+const keyUp = (event: KeyboardEvent) => {
+  if (event.code === '16') {
+    event.code === '16' && player.defaultSpeedMode();
   } else {
-    pressedKeys = pressedKeys.filter(key => key !== event.keyCode);
+    pressedKeys = pressedKeys.filter(key => key !== event.code);
   }
 };
 
 /* Set Window Events */
 window.addEventListener('keydown', keyDown);
 window.addEventListener('keyup', keyUp);
-window.addEventListener('scroll', e => player.updateCamera(e));
+window.addEventListener('scroll', () => player.updateCamera());
 
 /* Init Game */
 window.onload = init;
