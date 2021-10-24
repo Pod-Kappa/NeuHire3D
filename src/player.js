@@ -1,5 +1,6 @@
 import { PerspectiveCamera } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { Vector3 } from 'three';
 
 const DEFAULT_MOVE_SPEED = 0.08;
 const DEFAULT_TURN_SPEED = Math.PI * 0.02;
@@ -11,8 +12,11 @@ export class Player {
     this.offset = -5;
     this.speed = DEFAULT_MOVE_SPEED;
     this.turnSpeed = DEFAULT_TURN_SPEED;
+    this.isJumping = false;
     this.initSprite(scene);
     this.camera = new PerspectiveCamera(90, 1280 / 720, 0.1, 1000);
+    this.camera.position.set(0, this.height, this.offset);
+    this.camera.lookAt(new Vector3(0, this.height, 0));
   }
 
   initSprite(scene) {
@@ -52,6 +56,14 @@ export class Player {
 
   rotateCounterClockwise() {
     //TODO: Rotate Camera Counter Clockwise Around Chair
+  }
+
+  jump() {
+    if (!this.isJumping) {
+      this.isJumping = true;
+      this.sprite.position.y += 1;
+      setTimeout(() => (this.isJumping = false), 500);
+    }
   }
 
   moveSouth() {

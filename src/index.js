@@ -5,10 +5,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { Player } from './player.js';
 import { renderPlayerInfoPannel } from './infoPanel';
 
-var scene, camera, renderer, mesh;
-var meshFloor, ambientLight, light;
+var scene, renderer;
 
-var keyboard = {};
 var pressedKeys = [];
 var player;
 var USE_WIREFRAME = false;
@@ -24,6 +22,7 @@ var RESOURCES_LOADED = false;
 
 function init() {
   scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x87ceeb);
   player = new Player(scene);
 
   // Set up the loading screen's scene.
@@ -44,26 +43,24 @@ function init() {
     RESOURCES_LOADED = true;
   };
 
-  meshFloor = new THREE.Mesh(
-    new THREE.PlaneGeometry(20, 20, 10, 10),
+  const ground = new THREE.Mesh(
+    new THREE.PlaneGeometry(200, 200, 10, 10),
     new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: USE_WIREFRAME }),
   );
-  meshFloor.rotation.x -= Math.PI / 2;
-  meshFloor.receiveShadow = true;
-  scene.add(meshFloor);
+  ground.rotation.x -= Math.PI / 2;
+  ground.receiveShadow = true;
+  scene.add(ground);
 
-  ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
   scene.add(ambientLight);
 
-  light = new THREE.PointLight(0xffffff, 0.8, 18);
-  light.position.set(-3, 6, -3);
+  const light = new THREE.PointLight(0xfffffa, 0.8, 200);
+  light.position.set(-3, 50, -3);
   light.castShadow = true;
   light.shadow.camera.near = 0.1;
-  light.shadow.camera.far = 25;
+  light.shadow.camera.far = 50;
+  light.shadow.autoUpdate = true;
   scene.add(light);
-
-  player.camera.position.set(0, player.height, player.offset);
-  player.camera.lookAt(new THREE.Vector3(0, player.height, 0));
 
   renderer = new THREE.WebGLRenderer();
 
@@ -85,6 +82,7 @@ function init() {
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   });
+
   renderer.setSize(sizes.width, sizes.height);
 
   renderer.shadowMap.enabled = true;
@@ -134,6 +132,7 @@ const resolvePlayerInputMovement = () => {
   pressedKeys.includes(69) && player.rotateClockwise();
 
   /* Special (i.e. Jump) */
+  pressedKeys.includes(32) && player.jump();
 };
 
 const keyDown = event => {
@@ -142,6 +141,7 @@ const keyDown = event => {
   } else {
     !pressedKeys.includes(event.keyCode) && pressedKeys.push(event.keyCode);
   }
+  console.log(pressedKeys);
 };
 
 const keyUp = event => {
