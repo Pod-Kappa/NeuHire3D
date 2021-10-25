@@ -1,13 +1,22 @@
-import { PerspectiveCamera } from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { Group, PerspectiveCamera, Scene } from 'three';
+import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { Vector3 } from 'three';
 
 const DEFAULT_MOVE_SPEED = 0.08;
 const DEFAULT_TURN_SPEED = Math.PI * 0.02;
 const BOOST_MOVE_SPEED = 0.25;
 const BOOST_TURN_SPEED = Math.PI * 0.1;
+
 export class Player {
-  constructor(scene) {
+  height: number;
+  offset: number;
+  speed: number;
+  turnSpeed: number;
+  isJumping: boolean;
+  camera: any;
+  sprite: any;
+
+  constructor(scene: Scene) {
     this.height = 2.5;
     this.offset = -5;
     this.speed = DEFAULT_MOVE_SPEED;
@@ -19,7 +28,7 @@ export class Player {
     this.camera.lookAt(new Vector3(0, this.height, 0));
   }
 
-  initSprite(scene) {
+  initSprite(scene: Scene) {
     const loader = new GLTFLoader();
     loader.load('assets/glbs/Chair.glb', glb => {
       scene && scene.add(glb.scene);
@@ -27,7 +36,7 @@ export class Player {
     });
   }
 
-  setSprite(newSprite) {
+  setSprite(newSprite: any) {
     this.sprite = newSprite;
     this.sprite.scale.set(0.25, 0.25, 0.25);
   }
@@ -94,7 +103,7 @@ export class Player {
     this.turnSpeed = BOOST_TURN_SPEED;
   }
 
-  updateCamera(e) {
-    console.log(e);
+  updateCamera() {
+    console.log();
   }
 }

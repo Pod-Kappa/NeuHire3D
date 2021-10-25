@@ -4,12 +4,15 @@ const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 
 module.exports = {
-  entry: path.resolve(__dirname, '../src/index.js'),
+  entry: path.resolve(__dirname, '../src/index.ts'),
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+  },
   output: {
     filename: 'bundle.[contenthash].js',
     path: path.resolve(__dirname, '../dist'),
   },
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   plugins: [
     new CopyWebpackPlugin({
       patterns: [
@@ -27,23 +30,24 @@ module.exports = {
   ],
   module: {
     rules: [
-      // HTML
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
       {
         test: /\.(html)$/,
         use: ['html-loader'],
       },
-      // JS
       {
         test: /\.js$/,
         exclude: /node_modules/,
         use: ['babel-loader'],
       },
-      // CSS
       {
         test: /\.css$/,
         use: [MiniCSSExtractPlugin.loader, 'css-loader'],
       },
-      // Images
       {
         test: /\.(jpg|png|gif|svg)$/,
         use: [
@@ -66,7 +70,6 @@ module.exports = {
           },
         ],
       },
-      // Fonts
       {
         test: /\.(ttf|eot|woff|woff2)$/,
         use: [
@@ -78,7 +81,6 @@ module.exports = {
           },
         ],
       },
-      // Shaders
       {
         test: /\.(glsl|vs|fs|vert|frag)$/,
         exclude: /node_modules/,
