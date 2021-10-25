@@ -2,11 +2,14 @@ import './style.css';
 import * as THREE from 'three';
 import { Player } from './player';
 import { renderPlayerInfoPannel } from './infoPanel';
+import { Controller } from './controller';
+import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { SpriteFactory } from './spriteFactory';
 
 var scene: THREE.Scene, renderer: THREE.WebGLRenderer;
-
-var pressedKeys: string[] = [];
 var player: Player;
+var controller: Controller;
+var spriteFactory: SpriteFactory;
 var USE_WIREFRAME = false;
 
 // An object to hold all the things needed for our loading screen
@@ -21,7 +24,16 @@ var RESOURCES_LOADED = false;
 function init() {
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x87ceeb);
+  spriteFactory = new SpriteFactory(scene);
   player = new Player(scene);
+  controller = new Controller(player);
+
+  spriteFactory.getOBJSprite('/assets/glbs/Textured_Pin.obj');
+
+  /* Set Window Events */
+  window.addEventListener('keydown', event => controller.keyDown(event));
+  window.addEventListener('keyup', event => controller.keyUp(event));
+  window.addEventListener('scroll', player.updateCamera);
 
   // Set up the loading screen's scene.
   loadingScreen.box.position.set(0, 0, 5);
@@ -108,52 +120,11 @@ function animate() {
   }
   requestAnimationFrame(animate);
 
-  // mesh.rotation.x += 0.01;
-  // mesh.rotation.y += 0.02;
-  // crate.rotation.y += 0.01;
-
-  resolvePlayerInputMovement();
-  renderPlayerInfoPannel(player);
+  controller.resolvePlayerInputMovement();
+  // player && renderPlayerInfoPannel(player);
 
   renderer.render(scene, player.camera);
 }
-
-const resolvePlayerInputMovement = () => {
-  /* Player Movement */
-  (pressedKeys.includes('38') || pressedKeys.includes('87')) && player.moveNorth(); // Up-Arrow or W
-  (pressedKeys.includes('37') || pressedKeys.includes('65')) && player.moveWest(); // Left-Arrow or A
-  (pressedKeys.includes('40') || pressedKeys.includes('83')) && player.moveSouth(); // Down-Arrow or S
-  (pressedKeys.includes('39') || pressedKeys.includes('68')) && player.moveEast(); // Right-Arrow Or D
-
-  /* Camera Rotation */
-  pressedKeys.includes('81') && player.rotateCounterClockwise();
-  pressedKeys.includes('69') && player.rotateClockwise();
-
-  /* Special (i.e. Jump) */
-  pressedKeys.includes('32') && player.jump();
-};
-
-const keyDown = (event: KeyboardEvent) => {
-  if (event.code === '16') {
-    player.boostSpeedMode();
-  } else {
-    !pressedKeys.includes(event.code) && pressedKeys.push(event.code);
-  }
-  console.log(pressedKeys);
-};
-
-const keyUp = (event: KeyboardEvent) => {
-  if (event.code === '16') {
-    event.code === '16' && player.defaultSpeedMode();
-  } else {
-    pressedKeys = pressedKeys.filter(key => key !== event.code);
-  }
-};
-
-/* Set Window Events */
-window.addEventListener('keydown', keyDown);
-window.addEventListener('keyup', keyUp);
-window.addEventListener('scroll', () => player.updateCamera());
 
 /* Init Game */
 window.onload = init;
