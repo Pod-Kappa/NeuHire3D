@@ -2,7 +2,7 @@ import { Player } from './player';
 
 const formatNumber = (num: number) => `${Math.round((num + Number.EPSILON) * 100) / 100}`;
 
-var isOpen = true;
+var isOpen = false;
 
 export const renderPlayerInfoPannel = (player: Player) => {
   const hudElement = document.getElementById('playerInfoHUD');

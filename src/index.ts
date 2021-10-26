@@ -1,9 +1,9 @@
 import './style.css';
 import * as THREE from 'three';
+import * as Physijs from 'physijs';
 import { Player } from './player';
 import { renderPlayerInfoPannel } from './infoPanel';
 import { Controller } from './controller';
-import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { SpriteFactory } from './spriteFactory';
 
 var scene: THREE.Scene, renderer: THREE.WebGLRenderer;
@@ -28,7 +28,17 @@ function init() {
   player = new Player(scene);
   controller = new Controller(player);
 
-  spriteFactory.getOBJSprite('/assets/glbs/Textured_Pin.obj');
+  const newLight = new THREE.PointLight(0xffffff, 1, 100);
+  newLight.position.set(0, 0, 0);
+  scene.add(newLight);
+
+  spriteFactory.getOBJSpriteWithMtl(
+    '/assets/glbs/10492_Bowling Pin_v1_max2011_iteration-2.mtl',
+    '/assets/glbs/Textured_Pin.obj',
+    new THREE.Vector3(0, 0, 3),
+    new THREE.Vector3(-Math.PI / 2, 0, 0),
+    new THREE.Vector3(0.05, 0.05, 0.05),
+  );
 
   /* Set Window Events */
   window.addEventListener('keydown', event => controller.keyDown(event));
@@ -61,10 +71,10 @@ function init() {
   ground.receiveShadow = true;
   scene.add(ground);
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+  const ambientLight = new THREE.AmbientLight(0xfffff0, 0.5);
   scene.add(ambientLight);
 
-  const light = new THREE.PointLight(0xfffffa, 0.8, 200);
+  const light = new THREE.PointLight(0xfffffa, 0.4, 200);
   light.position.set(-3, 50, -3);
   light.castShadow = true;
   light.shadow.camera.near = 0.1;
@@ -121,8 +131,7 @@ function animate() {
   requestAnimationFrame(animate);
 
   controller.resolvePlayerInputMovement();
-  // player && renderPlayerInfoPannel(player);
-
+  player && renderPlayerInfoPannel(player);
   renderer.render(scene, player.camera);
 }
 

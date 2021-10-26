@@ -1,7 +1,7 @@
 import { Group, PerspectiveCamera, Scene } from 'three';
-import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { Vector3 } from 'three';
 import { SpriteFactory } from './spriteFactory';
+import { World } from 'cannon';
 
 const DEFAULT_MOVE_SPEED = 0.08;
 const DEFAULT_TURN_SPEED = Math.PI * 0.02;
@@ -32,7 +32,6 @@ export class Player {
     this.sprite = new Group();
     this.handleSetSpriteFromFactory = (sprite: Group) => {
       this.sprite = sprite;
-      this.sprite.rotation.y = Math.PI / 2;
     };
     this.init(scene);
   }
@@ -43,7 +42,7 @@ export class Player {
       '/assets/glbs/Chair.glb',
       this.handleSetSpriteFromFactory,
       new Vector3(0, 0, 0),
-      new Vector3(0, 0, 0),
+      new Vector3(0, Math.PI / 2, 0),
       new Vector3(0.25, 0.25, 0.25),
     );
   }

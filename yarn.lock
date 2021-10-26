@@ -901,6 +901,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@types/cannon@^0.1.7":
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/@types/cannon/-/cannon-0.1.7.tgz#207054af280bcb6c14febd8f8c886c51b89fb5b2"
+  integrity sha512-D2BpUjnKI6B8+VkUHXWHqDziR6V3nllRwKsSCYajJusWOfGxuaF9s7gqrYnSAX7G2ykbZ+YWyOCOz1Gk3RRVrw==
+
 "@types/eslint-scope@^3.7.0":
   version "3.7.0"
   resolved "https://registry.npmjs.org/@types/eslint-scope/-/eslint-scope-3.7.0.tgz"
@@ -949,6 +954,13 @@
   version "16.0.0"
   resolved "https://registry.npmjs.org/@types/node/-/node-16.0.0.tgz"
   integrity sha512-TmCW5HoZ2o2/z2EYi109jLqIaPIi9y/lc2LmDCWzuCi35bcaQ+OtUh6nwBiFK7SOu25FAU5+YKdqFZUwtqGSdg==
+
+"@types/physijs@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/physijs/-/physijs-1.0.0.tgz#4f2ce18c22f295f52b9847f00689baf13076ac9b"
+  integrity sha512-acequdfnJaoNyGe4mxnfBWjU8qQ+IKu14NxvRsOEYqW8S4Cwa9l0oRfJIbuOP5mdiLyKxBS847pox+Xmct7KDg==
+  dependencies:
+    physijs "*"
 
 "@types/source-list-map@*":
   version "0.1.2"
@@ -1514,11 +1526,6 @@ caniuse-lite@^1.0.30001219:
   version "1.0.30001242"
   resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001242.tgz"
   integrity sha512-KvNuZ/duufelMB3w2xtf9gEWCSxJwUgoxOx5b6ScLXC4kPc9xsczUVCPrQU26j5kOsHM4pSUL54tAZt5THQKug==
-
-cannon@^0.6.2:
-  version "0.6.2"
-  resolved "https://registry.npmjs.org/cannon/-/cannon-0.6.2.tgz"
-  integrity sha1-HnvHLdWEGYLzwQTCvFeL+k+xxXI=
 
 chalk@^2.0.0:
   version "2.4.2"
@@ -3730,6 +3737,13 @@ path-type@^4.0.0:
   resolved "https://registry.npmjs.org/path-type/-/path-type-4.0.0.tgz"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
+physijs@*, physijs@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/physijs/-/physijs-1.0.4.tgz#c40bcfbde0eee0d0d6747637b90ee7fb02aa448f"
+  integrity sha512-+waZKqp/AWdeOL4Jcp+LuKAAvEg4DKiwTls+ZbAYrx8wgmW+EJLi2e3xdazVTDzFwW17IDcMTgWhY9fEMcd6jw==
+  dependencies:
+    three "^0.115.0"
+
 picomatch@^2.0.4, picomatch@^2.2.3:
   version "2.3.0"
   resolved "https://registry.npmjs.org/picomatch/-/picomatch-2.3.0.tgz"
@@ -4619,6 +4633,11 @@ terser@^5.7.0:
     commander "^2.20.0"
     source-map "~0.7.2"
     source-map-support "~0.5.19"
+
+three@^0.115.0:
+  version "0.115.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.115.0.tgz#540d800c381b9da2334c024f0fbe4d23f84eb05e"
+  integrity sha512-mAV2Ky3RdcbdSbR9capI+tKLvRldWYxd4151PZTT/o7+U2jh9Is3a4KmnYwzyUAhB2ZA3pXSgCd2DOY4Tj5kow==
 
 three@^0.130.1:
   version "0.130.1"
