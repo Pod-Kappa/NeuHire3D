@@ -61,6 +61,7 @@ export class ThreePhysicsComponent extends Scene3D {
   update() {
     this.keyboardController && this.keyboardController.resolvePlayerInputMovement();
     this.player && this.player.updateCamera();
+    this.player && this.player.getPosition().y < -10 && this.player.reset();
   }
 }
 
