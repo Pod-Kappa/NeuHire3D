@@ -1,16 +1,10 @@
-# Three.js - Template - Simple
+# Three.js & ammo.js
 
-## Setup
-Download [Node.js](https://nodejs.org/en/download/).
-Run this followed commands:
+## Simple example of Three.js with ammo.js with Enable3D
 
-``` bash
-# Install dependencies (only the first time)
-npm install
+![Screenshot](https://raw.githubusercontent.com/tamani-coding/enable3d-physics-examples/master/screenshot.png)
 
-# Run the local server at localhost:8080
-npm run dev
+---
 
-# Build for production in the dist/ directory
-npm run build
-```
+
+Run `npm install` and `npm start`
