@@ -4,10 +4,13 @@ import { SpriteFactory } from './code/SpriteFactory';
 import { addWindowEvents } from './code/WindowEvents';
 import { Vector3 } from 'three';
 import { Player } from './code/objects/Player';
+import { KeyboardController } from './controller/KeyboardController';
+import { GameWorld } from './code/objects/GameWorld';
 
 export class ThreePhysicsComponent extends Scene3D {
   spriteFactory: SpriteFactory | undefined;
   player: Player | undefined;
+  keyboardController: KeyboardController | undefined;
   addExisting: (obj: any) => any;
 
   constructor() {
@@ -17,24 +20,23 @@ export class ThreePhysicsComponent extends Scene3D {
 
   async init() {
     this.spriteFactory = new SpriteFactory(this.physics, this.addExisting);
-    this.player = new Player(this.physics);
+    this.player = new Player(this.physics, this.camera);
+    // this.gameWorld = GameWorld(this.spriteFactory);
+    this.keyboardController = new KeyboardController(this.player);
     this.renderer.setPixelRatio(1);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    addWindowEvents(this.camera, this.renderer);
+    addWindowEvents(this.camera, this.renderer, this.keyboardController);
   }
 
   async preload() {}
 
   async create() {
     // set up scene (light, ground, grid, sky, orbitControls)
-    this.warpSpeed(); // '-orbitControls' for no orbit controls
+    this.warpSpeed('-orbitControls'); // '-orbitControls' for no orbit controls
 
     if (this.physics.debug) {
       this.physics.debug.enable();
     }
-
-    // position camera
-    this.camera.position.set(13, 10, 23);
 
     //Render Scene
     //TODO: Create world class and run it's render method
@@ -44,10 +46,10 @@ export class ThreePhysicsComponent extends Scene3D {
     if (this.spriteFactory && this.player) {
       const playerObject = await this.spriteFactory.addGLTFObject(
         './assets/glbs/Chair.glb',
-        new Vector3(0, 5, 0),
+        new Vector3(0, 0, 0),
         new Vector3(0, -4.3, -0.5),
         new Vector3(5, 8, 5),
-        new Vector3(0, 0, 0),
+        new Vector3(0, -(Math.PI / 2), 0),
         new Vector3(0.25, 0.25, 0.25),
         1,
         'PLAYER',
@@ -56,7 +58,10 @@ export class ThreePhysicsComponent extends Scene3D {
     }
   }
 
-  update() {}
+  update() {
+    this.keyboardController && this.keyboardController.resolvePlayerInputMovement();
+    this.player && this.player.updateCamera();
+  }
 }
 
 // set your project configs
