@@ -8,6 +8,7 @@ export const addWindowEvents = (camera: any, renderer: any, keyboardController: 
     const width = window.innerWidth;
     const height = window.innerHeight;
     // Update camera
+    camera.aspect = width / height;
     camera.updateProjectionMatrix();
     // Update renderer
     renderer.setSize(width, height);

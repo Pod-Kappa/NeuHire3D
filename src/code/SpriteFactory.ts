@@ -20,24 +20,23 @@ export class SpriteFactory {
     boundingBoxPosition: Vector3 = new Vector3(0, 0, 0),
     boundingBoxRegion: Vector3 = new Vector3(5, 5, 5),
     rotation: Vector3 = new Vector3(0, 0, 0),
-    scale: Vector3 = new Vector3(1, 1, 1),
-    bounciness = 0.5,
-    name?: string,
+    boudingBoxScale: Vector3 = new Vector3(1, 1, 1),
+    modelScale: Vector3 = new Vector3(1, 1, 1),
+    bounciness = 0,
+    weight: number = 5,
   ) {
     return new GLTFLoader()
       .loadAsync(path)
       .then(gltf => {
         const importedGltf: any = gltf.scene;
         importedGltf.position.set(boundingBoxPosition.x, boundingBoxPosition.y, boundingBoxPosition.z);
+        importedGltf.scale.set(modelScale.x, modelScale.y, modelScale.z);
 
         const physObject: ExtendedObject3D = new ExtendedObject3D();
         physObject.add(importedGltf);
         physObject.rotation.set(rotation.x, rotation.y, rotation.z);
-        physObject.scale.set(scale.x, scale.y, scale.z);
+        physObject.scale.set(boudingBoxScale.x, boudingBoxScale.y, boudingBoxScale.z);
         physObject.position.set(worldPosition.x, worldPosition.y, worldPosition.z);
-        if (name) physObject.name = name;
-
-        //physObject.body.setBounciness(bounciness > 1 || bounciness < 0 ? 0 : bounciness);
 
         this.addExisting(physObject);
         this.physics.add.existing(physObject, {
@@ -47,15 +46,16 @@ export class SpriteFactory {
           depth: boundingBoxRegion.z,
         });
 
+        physObject.body.setBounciness(bounciness > 1 || bounciness < 0 ? 0 : bounciness);
+
         console.log(`Successfully loaded model: ${path}`);
         return physObject;
       })
       .catch(() => {
         let physObject = this.physics.add.box({ x: 0, y: 2 });
         physObject.rotation.set(rotation.x, rotation.y, rotation.z);
-        physObject.scale.set(scale.x, scale.y, scale.z);
+        physObject.scale.set(boudingBoxScale.x, boudingBoxScale.y, boudingBoxScale.z);
         physObject.position.set(worldPosition.x, worldPosition.y, worldPosition.z);
-        if (name) physObject.name = name;
 
         this.addExisting(physObject);
         this.physics.add.existing(physObject);

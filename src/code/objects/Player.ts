@@ -1,5 +1,6 @@
 import { ExtendedObject3D, ThirdPersonControls } from 'enable3d';
 import { AmmoPhysics } from 'enable3d/node_modules/@enable3d/ammo-physics';
+import { Vector3 } from 'three';
 
 const DEFAULT_MOVE_SPEED = 0.05;
 const DEFAULT_TURN_SPEED = Math.PI * 0.02;
@@ -59,21 +60,32 @@ export class Player {
   reset() {
     if (!this.isResetting) {
       this.isResetting = true;
-
-      this.sprite.body.setCollisionFlags(2);
-      this.sprite.position.set(0, 0, 0);
-      this.sprite.rotation.set(0, DEFAULT_Y_ROTATION, 0);
-      this.sprite.body.needUpdate = true;
-
-      this.sprite.body.once.update(() => {
-        this.sprite.body.setCollisionFlags(0);
-        this.sprite.body.setVelocity(0, 0, 0);
-        this.sprite.body.setAngularVelocity(0, 0, 0);
-      });
-
+      this.teleport(new Vector3(0, 0, 0));
+      this.rotate(new Vector3(0, 0, 0));
       this.updateCamera();
       setTimeout(() => (this.isResetting = false), 2000);
     }
+  }
+
+  teleport(position: Vector3) {
+    this.sprite.body.setCollisionFlags(2);
+    this.sprite.position.set(position.x, position.y, position.z);
+    this.update();
+  }
+
+  rotate(rotation: Vector3) {
+    this.sprite.body.setCollisionFlags(2);
+    this.sprite.rotation.set(rotation.x, rotation.y, rotation.z);
+    this.update();
+  }
+
+  update() {
+    this.sprite.body.needUpdate = true;
+    this.sprite.body.once.update(() => {
+      this.sprite.body.setCollisionFlags(0);
+      this.sprite.body.setVelocity(0, 0, 0);
+      this.sprite.body.setAngularVelocity(0, 0, 0);
+    });
   }
 
   jump() {
@@ -98,19 +110,40 @@ export class Player {
   }
 
   moveNorth() {
+    console.log(this.sprite.body.rotation.y);
+    if (this.sprite.body.rotation.y > -(Math.PI / 2)) {
+      this.sprite.body.applyTorque(0, -(Math.PI / 2), 0);
+    } else if (this.sprite.body.rotation.y < -(Math.PI / 2)) {
+      this.sprite.body.applyTorque(0, Math.PI / 2, 0);
+    }
     this.sprite.body.applyForceZ(-this.speed);
   }
 
   moveSouth() {
+    if (this.sprite.body.rotation.y > Math.PI / 2) {
+      this.sprite.body.applyTorque(0, -(Math.PI / 2), 0);
+    } else if (this.sprite.body.rotation.y < Math.PI / 2) {
+      this.sprite.body.applyTorque(0, Math.PI / 2, 0);
+    }
     this.sprite.body.applyForceZ(this.speed);
   }
 
-  moveEast() {
-    this.sprite.body.applyForceX(this.speed);
+  moveWest() {
+    if (this.sprite.body.rotation.y > 0) {
+      this.sprite.body.applyTorque(0, -Math.PI, 0);
+    } else if (this.sprite.body.rotation.y < 0) {
+      this.sprite.body.applyTorque(0, Math.PI, 0);
+    }
+    this.sprite.body.applyForceX(-this.speed);
   }
 
-  moveWest() {
-    this.sprite.body.applyForceX(-this.speed);
+  moveEast() {
+    if (this.sprite.body.rotation.y > Math.PI) {
+      this.sprite.body.applyTorque(0, -Math.PI, 0);
+    } else if (this.sprite.body.rotation.y < Math.PI) {
+      this.sprite.body.applyTorque(0, Math.PI, 0);
+    }
+    this.sprite.body.applyForceX(this.speed);
   }
 
   defaultSpeedMode() {

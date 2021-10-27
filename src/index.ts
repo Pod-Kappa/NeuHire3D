@@ -12,6 +12,7 @@ export class ThreePhysicsComponent extends Scene3D {
   player: Player | undefined;
   keyboardController: KeyboardController | undefined;
   addExisting: (obj: any) => any;
+  gameWorld: GameWorld | undefined;
 
   constructor() {
     super();
@@ -21,7 +22,7 @@ export class ThreePhysicsComponent extends Scene3D {
   async init() {
     this.spriteFactory = new SpriteFactory(this.physics, this.addExisting);
     this.player = new Player(this.physics, this.camera);
-    // this.gameWorld = GameWorld(this.spriteFactory);
+    this.gameWorld = new GameWorld(this.spriteFactory, this.physics);
     this.keyboardController = new KeyboardController(this.player);
     this.renderer.setPixelRatio(1);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -32,27 +33,27 @@ export class ThreePhysicsComponent extends Scene3D {
 
   async create() {
     // set up scene (light, ground, grid, sky, orbitControls)
-    this.warpSpeed('-orbitControls'); // '-orbitControls' for no orbit controls
+    this.warpSpeed('-orbitControls');
 
     if (this.physics.debug) {
       this.physics.debug.enable();
     }
 
     //Render Scene
-    //TODO: Create world class and run it's render method
+    this.gameWorld && this.gameWorld.renderWorld();
 
     //Render Player
-    //TODO: Create Player class and run it's render method
     if (this.spriteFactory && this.player) {
       const playerObject = await this.spriteFactory.addGLTFObject(
         './assets/glbs/Chair.glb',
-        new Vector3(0, 0, 0),
+        new Vector3(5, 0, 5),
         new Vector3(0, -4.3, -0.5),
         new Vector3(5, 8, 5),
         new Vector3(0, -(Math.PI / 2), 0),
         new Vector3(0.25, 0.25, 0.25),
-        1,
-        'PLAYER',
+        new Vector3(1, 1, 1),
+        0,
+        100,
       );
       this.player.setSprite(playerObject);
     }
