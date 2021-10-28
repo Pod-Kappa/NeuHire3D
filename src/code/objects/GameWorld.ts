@@ -17,7 +17,7 @@ export class GameWorld {
 
     //bowling ball
     this.spriteFactory.addGLTFSphereObject(
-      './assets/glbs/BowlingBall.glb',
+      './assets/glbs/BowlingBall.gltf',
       new Vector3(5, 0, 5),
       new Vector3(0, 0, 0),
       0.5,
@@ -51,14 +51,14 @@ const createPinTriangle = (spriteFactory: SpriteFactory, position: Vector3) => {
 
 const createPin = (spriteFactory: SpriteFactory, position: Vector3) => {
   spriteFactory.addGLTFBoxObject(
-    './assets/glbs/Bowling_Pin.glb',
+    './assets/glbs/YellowPin.gltf',
     new Vector3(position.x, position.y, position.z),
-    new Vector3(0, -0.75, 0),
-    new Vector3(0.4, 1.5, 0.4),
+    new Vector3(0, -0.7, 0),
+    new Vector3(0.35, 1.5, 0.35),
     new Vector3(0, -(Math.PI / 2), 0),
     new Vector3(1, 1, 1),
-    new Vector3(0.004, 0.004, 0.004),
+    new Vector3(0.04, 0.04, 0.04),
     0.85,
-    5,
+    10,
   );
 };

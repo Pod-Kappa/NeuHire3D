@@ -59,7 +59,6 @@ export class SpriteFactory {
         physObject.position.set(worldPosition.x, worldPosition.y, worldPosition.z);
 
         this.addExisting(physObject);
-        this.physics.add.existing(physObject);
 
         console.log(`Failed to load model: ${path}`);
         return physObject;
@@ -109,7 +108,6 @@ export class SpriteFactory {
         physObject.position.set(worldPosition.x, worldPosition.y, worldPosition.z);
 
         this.addExisting(physObject);
-        this.physics.add.existing(physObject);
 
         console.log(`Failed to load model: ${path}`);
         return physObject;
