@@ -13,7 +13,20 @@ export class GameWorld {
 
   async renderWorld() {
     //TODO: Add Ground;
-    createPinTriangle(this.spriteFactory, new Vector3(-2, 0, 5));
+    createPinTriangle(this.spriteFactory, new Vector3(2.5, 0, -5));
+
+    //bowling ball
+    this.spriteFactory.addGLTFSphereObject(
+      './assets/glbs/BowlingBall.glb',
+      new Vector3(5, 0, 5),
+      new Vector3(0, 0, 0),
+      0.5,
+      new Vector3(0, -(Math.PI / 2), 0),
+      new Vector3(1, 1, 1),
+      new Vector3(5, 5, 5),
+      0.85,
+      10,
+    );
   }
 }
 
@@ -37,7 +50,7 @@ const createPinTriangle = (spriteFactory: SpriteFactory, position: Vector3) => {
 };
 
 const createPin = (spriteFactory: SpriteFactory, position: Vector3) => {
-  spriteFactory.addGLTFObject(
+  spriteFactory.addGLTFBoxObject(
     './assets/glbs/Bowling_Pin.glb',
     new Vector3(position.x, position.y, position.z),
     new Vector3(0, -0.75, 0),
@@ -46,6 +59,6 @@ const createPin = (spriteFactory: SpriteFactory, position: Vector3) => {
     new Vector3(1, 1, 1),
     new Vector3(0.004, 0.004, 0.004),
     0.85,
-    1,
+    5,
   );
 };

@@ -2,7 +2,7 @@ import { ExtendedObject3D, ThirdPersonControls } from 'enable3d';
 import { AmmoPhysics } from 'enable3d/node_modules/@enable3d/ammo-physics';
 import { Vector3 } from 'three';
 
-const DEFAULT_MOVE_SPEED = 0.05;
+const DEFAULT_MOVE_SPEED = 10;
 const DEFAULT_TURN_SPEED = Math.PI * 0.02;
 const BOOST_MOVE_SPEED = 0.25;
 const BOOST_TURN_SPEED = Math.PI * 0.1;
@@ -61,7 +61,7 @@ export class Player {
     if (!this.isResetting) {
       this.isResetting = true;
       this.teleport(new Vector3(0, 0, 0));
-      this.rotate(new Vector3(0, 0, 0));
+      this.rotate(new Vector3(0, -(Math.PI / 2), 0));
       this.updateCamera();
       setTimeout(() => (this.isResetting = false), 2000);
     }
@@ -91,7 +91,7 @@ export class Player {
   jump() {
     if (!this.isJumping) {
       this.isJumping = true;
-      this.sprite.body.applyForceY(5);
+      this.sprite.body.applyForceY(200);
       setTimeout(() => (this.isJumping = false), 500);
     }
   }
@@ -105,12 +105,10 @@ export class Player {
   }
 
   unBrake() {
-    console.log('unbreak');
     this.sprite.body.setFriction(0);
   }
 
   moveNorth() {
-    console.log(this.sprite.body.rotation.y);
     if (this.sprite.body.rotation.y > -(Math.PI / 2)) {
       this.sprite.body.applyTorque(0, -(Math.PI / 2), 0);
     } else if (this.sprite.body.rotation.y < -(Math.PI / 2)) {

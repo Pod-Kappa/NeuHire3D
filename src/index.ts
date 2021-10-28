@@ -6,6 +6,8 @@ import { Vector3 } from 'three';
 import { Player } from './code/objects/Player';
 import { KeyboardController } from './controller/KeyboardController';
 import { GameWorld } from './code/objects/GameWorld';
+import { AmmoPhysics } from 'enable3d/node_modules/@enable3d/ammo-physics';
+import { Scene } from 'enable3d/node_modules/three';
 
 export class ThreePhysicsComponent extends Scene3D {
   spriteFactory: SpriteFactory | undefined;
@@ -13,6 +15,7 @@ export class ThreePhysicsComponent extends Scene3D {
   keyboardController: KeyboardController | undefined;
   addExisting: (obj: any) => any;
   gameWorld: GameWorld | undefined;
+  ground: ExtendedObject3D | undefined;
 
   constructor() {
     super();
@@ -44,7 +47,7 @@ export class ThreePhysicsComponent extends Scene3D {
 
     //Render Player
     if (this.spriteFactory && this.player) {
-      const playerObject = await this.spriteFactory.addGLTFObject(
+      const playerObject = await this.spriteFactory.addGLTFBoxObject(
         './assets/glbs/Chair.glb',
         new Vector3(5, 0, 5),
         new Vector3(0, -4.3, -0.5),
@@ -53,7 +56,7 @@ export class ThreePhysicsComponent extends Scene3D {
         new Vector3(0.25, 0.25, 0.25),
         new Vector3(1, 1, 1),
         0,
-        100,
+        50,
       );
       this.player.setSprite(playerObject);
     }
@@ -64,6 +67,8 @@ export class ThreePhysicsComponent extends Scene3D {
     this.player && this.player.updateCamera();
     this.player && this.player.getPosition().y < -10 && this.player.reset();
   }
+
+  reset() {}
 }
 
 // set your project configs
