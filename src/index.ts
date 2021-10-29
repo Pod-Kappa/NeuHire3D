@@ -49,7 +49,7 @@ export class ThreePhysicsComponent extends Scene3D {
     if (this.spriteFactory && this.player) {
       const playerObject = await this.spriteFactory.addGLTFBoxObject(
         './assets/glbs/Chair.glb',
-        new Vector3(5, 0, 5),
+        new Vector3(5, 0, 9),
         new Vector3(0, -4.3, -0.5),
         new Vector3(5, 8, 5),
         new Vector3(0, -(Math.PI / 2), 0),

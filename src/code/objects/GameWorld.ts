@@ -16,16 +16,13 @@ export class GameWorld {
     createPinTriangle(this.spriteFactory, new Vector3(2.5, 0, -5));
 
     //bowling ball
-    this.spriteFactory.addGLTFSphereObject(
+    this.spriteFactory.addGLTFConvexObject(
       './assets/glbs/BowlingBall.gltf',
-      new Vector3(5, 0, 5),
-      new Vector3(0, 0, 0),
-      0.5,
+      new Vector3(5, 0, 8),
       new Vector3(0, -(Math.PI / 2), 0),
-      new Vector3(1, 1, 1),
       new Vector3(5, 5, 5),
       0.85,
-      10,
+      20,
     );
   }
 }
@@ -59,6 +56,6 @@ const createPin = (spriteFactory: SpriteFactory, position: Vector3) => {
     new Vector3(1, 1, 1),
     new Vector3(0.04, 0.04, 0.04),
     0.85,
-    10,
+    2,
   );
 };

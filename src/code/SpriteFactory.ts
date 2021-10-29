@@ -113,4 +113,46 @@ export class SpriteFactory {
         return physObject;
       });
   }
+
+  async addGLTFConvexObject(
+    path: string,
+    worldPosition: Vector3 = new Vector3(0, 0, 0),
+    rotation: Vector3 = new Vector3(0, 0, 0),
+    modelScale: Vector3 = new Vector3(1, 1, 1),
+    bounciness = 0,
+    mass: number = 1,
+  ) {
+    return new GLTFLoader()
+      .loadAsync(path)
+      .then(gltf => {
+        const importedGltf: any = gltf.scene;
+        importedGltf.scale.set(modelScale.x, modelScale.y, modelScale.z);
+
+        const physObject: ExtendedObject3D = new ExtendedObject3D();
+        physObject.add(importedGltf);
+        physObject.rotation.set(rotation.x, rotation.y, rotation.z);
+        physObject.position.set(worldPosition.x, worldPosition.y, worldPosition.z);
+
+        this.addExisting(physObject);
+        this.physics.add.existing(physObject, {
+          shape: 'convex',
+          mass,
+        });
+
+        physObject.body.setBounciness(bounciness > 1 || bounciness < 0 ? 0 : bounciness);
+
+        console.log(`Successfully loaded model: ${path}`);
+        return physObject;
+      })
+      .catch(() => {
+        let physObject = this.physics.add.box({ x: 0, y: 2 });
+        physObject.rotation.set(rotation.x, rotation.y, rotation.z);
+        physObject.position.set(worldPosition.x, worldPosition.y, worldPosition.z);
+
+        this.addExisting(physObject);
+
+        console.log(`Failed to load model: ${path}`);
+        return physObject;
+      });
+  }
 }
